@@ -1,5 +1,21 @@
 <?php 
+require "class/calendar.php";
 
+$calendar = new Calendar(getdate());
+$year = $calendar->year();
+$week = $calendar->get_week();
+
+var_dump($week);
+
+foreach($week as $key){
+
+    $date = getdate($key);
+
+    var_dump($date);
+
+}
+
+die();
 function translate($tab, $element){
 
     foreach($tab as $key => $value){
@@ -34,7 +50,6 @@ CONST month = [
 ];
 CONST seconds_per_day = 86400;
 
-date_default_timezone_set('Europe/Paris');
 // echo date('l jS \of F Y h:i:s A');
 
 $__H = date("G");
@@ -45,16 +60,16 @@ $__now = getdate();
 
 $now = $__now[0];
 
+
 $last_year = getdate(mktime(0, 0, 0, 1, 1, ($__now["year"])));
 $next_year = getdate(mktime(0, 0, 0, 1, 1, ($__now["year"] + 1)));
+
+
 //variables optionnelles..........
 $tomorrow  = getdate(mktime($__H, $__m, $__s, date("m")  , date("d") + 1, date("Y")));
 $lastmonth = getdate(mktime($__H, $__m, $__s, date("m") - 1, date("d"),   date("Y")));
 
 
-$year__last__contruct = [];
-$year__next__contruct = [];
-$decal__day = $now - seconds_per_day;
 
 
 while($decal__day > $last_year[0]){
