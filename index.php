@@ -15,7 +15,7 @@ $get_weeks = $calendar->get_weeks($year);
 
 
 //make semaines......
-$weeks = $calendar->make_weeks($get_weeks, 32);
+$weeks = $calendar->make_weeks($get_weeks);
 
 
 var_dump($weeks);

@@ -77,6 +77,30 @@ class Calendar {
                     $key__ += self::SECONDES_PERS_DAY;
                     $min++;
                 }
+            }
+
+            if($id === "now"){
+
+               $x = round($this->get_date_now()["yday"] / 7, 0, PHP_ROUND_HALF_DOWN);
+               $min = 0;
+               $max = 7;
+               $key__ = $key;
+               $count_week++;
+
+               if($x == $count_week){
+
+                   while($min < $max){
+   
+                       $week = getdate($key__);
+                       $week__ []= [
+                           $count_week => $week
+                       ];
+                       $key__ += self::SECONDES_PERS_DAY;
+                       $min++;
+                   }
+               }
+               
+
             } else {
 
                 $min = 0;
@@ -98,7 +122,7 @@ class Calendar {
                 } else {
 
                     return;
-                    
+
                 }
             }
         }
