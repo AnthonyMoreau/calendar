@@ -25,13 +25,15 @@ class Calendar {
         "November" => "Novembre",
         "December" => "Décembre"
     ];
-    const SECONDES_PERS_DAY= 86400;
+    const SECONDES_PERS_DAY = 86400;
 
 
     private $year__last__contruct = [];
     private $year__next__contruct = [];
     private $day;
-    private $week = [] ;
+    private $week = [];
+
+
 
     public function __construct($date__now){
         $this->date__now = $date__now;
@@ -61,6 +63,7 @@ class Calendar {
 
         $week__ = [];
         $count_week = 0;
+        
         foreach($weeks as $key){
 
             if($id === null){
@@ -77,11 +80,10 @@ class Calendar {
                     $key__ += self::SECONDES_PERS_DAY;
                     $min++;
                 }
-            }
 
-            if($id === "now"){
+            } elseif($id === "now") {
 
-               $x = round($this->get_date_now()["yday"] / 7, 0, PHP_ROUND_HALF_DOWN);
+               $x = $this->week_num($this->get_date_now());
                $min = 0;
                $max = 7;
                $key__ = $key;
@@ -102,13 +104,12 @@ class Calendar {
                
 
             } else {
-
                 $min = 0;
                 $max = 7;
                 $key__ = $key;
                 $count_week++;
 
-                if($id === $count_week AND $id <= 52){
+                if($count_week === $id){
 
                     while($min < $max){
     
@@ -119,14 +120,22 @@ class Calendar {
                         $key__ += self::SECONDES_PERS_DAY;
                         $min++;
                     }
-                } else {
-
-                    return;
-
                 }
             }
         }
         return $week__;
+    }
+
+    public function week_num($date = false, $key = null){
+        if($key !== null AND $date = false ){
+            
+            $x = round($key / 7, 0, PHP_ROUND_HALF_DOWN) + 1;
+
+        } else {
+
+            $x = round($date["yday"] / 7, 0, PHP_ROUND_HALF_DOWN) + 1;
+        }
+        return $x;
     }
 
     public function remote_year(){
@@ -143,6 +152,16 @@ class Calendar {
             }  
         }
         return $this->year__last__contruct;
+    }
+
+    public function translate($tab, $element){
+
+        foreach($tab as $key => $value){
+            if($element === $key){
+                $element = $value;
+            }
+        }
+        return $element;
     }
 
     private function termine_year(){
@@ -173,15 +192,4 @@ class Calendar {
     private function decale_day(){
         return $this->get_date_now()[0] - self::SECONDES_PERS_DAY;
     }
-
-    private function translate($tab, $element){
-
-        foreach($tab as $key => $value){
-            if($element === $key){
-                $element = $value;
-            }
-        }
-        return $element;
-    }
-
 }
