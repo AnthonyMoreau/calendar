@@ -27,9 +27,9 @@ class Calendar {
     ];
     const SECONDES_PERS_DAY= 86400;
 
+
     private $year__last__contruct = [];
     private $year__next__contruct = [];
-    private $decal__day;
     private $day;
     private $week = [] ;
 
@@ -45,45 +45,64 @@ class Calendar {
         return array_merge(array_reverse($this->remote_year()) , $this->termine_year());
     }
 
-    public function get_week($id = null){
-        $count = 0;
-        if($id === null){
+    public function get_weeks($year){
+        $monday_ = [];
+        foreach($year as $key){
+            $monday = getdate($key);
 
-            $now = getdate(time());
-            $x = round((($now["yday"] + 1) / 7), 0, PHP_ROUND_HALF_DOWN );
-
-            foreach($this->year() as $key){
-                
-                $date = getdate($key);
-                $z = round((($date["yday"]) / 7), 0, PHP_ROUND_HALF_DOWN );
-
-                if($x === $z){
-                    $count++;
-                    if($count > 7){
-                        break;
-                    }
-                    $this->week []=  $date[0];
-                }
+            if($monday["weekday"] === "Monday"){
+                $monday_ []= $monday[0];
             }
+        }
+        return $monday_;
+    }
 
-        } else {
-            foreach($this->year() as $key){
+    public function make_weeks($weeks, $id = null){
 
-                $date = getdate($key);
+        $week__ = [];
+        $count_week = 0;
+        foreach($weeks as $key){
 
-                $x = round((($date["yday"] + 1 ) / 7), 0, PHP_ROUND_HALF_DOWN );
-                
-                if($x == $id){
-                    $count++;
-                    if($count > 7){
-                        break;
+            if($id === null){
+
+                $min = 0;
+                $max = 7;
+                $key__ = $key;
+                $count_week++;
+                while($min < $max){
+                    $week = getdate($key__);
+                    $week__ []= [
+                        $count_week => $week
+                    ];
+                    $key__ += self::SECONDES_PERS_DAY;
+                    $min++;
+                }
+            } else {
+
+                $min = 0;
+                $max = 7;
+                $key__ = $key;
+                $count_week++;
+
+                if($id === $count_week AND $id <= 52){
+
+                    while($min < $max){
+    
+                        $week = getdate($key__);
+                        $week__ []= [
+                            $count_week => $week
+                        ];
+                        $key__ += self::SECONDES_PERS_DAY;
+                        $min++;
                     }
-                    $this->week []=  $date[0];
+                } else {
+
+                    return;
+                    
                 }
             }
         }
-
-        return $this->week;
+        return $week__;
     }
 
     public function remote_year(){
@@ -113,7 +132,6 @@ class Calendar {
             $decal__day += self::SECONDES_PERS_DAY; 
 
             if($decal__day > $this->get_next_year()[0] AND getdate($decal__day)["weekday"] === "Monday"){
-                var_dump($decal__day);
                 break;
             }
         }
