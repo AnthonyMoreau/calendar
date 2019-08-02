@@ -2,14 +2,36 @@
 require "class/calendar.php";
 require "functions.php";
 
+session_start();
+
+
 //initialise l'année en cours.......
 $calendar = new Calendar(getdate());
 $year = $calendar->year();
+$get_weeks = $calendar->get_weeks($year);
+;
 
-$count = 0;
-$weeks = 1;
-?> 
 
+$_SESSION["count"];
+
+if(empty($_POST)){
+    $_SESSION["count"] = 0;
+}
+
+if(!empty($_POST)){
+    $control = $_POST["control"];
+    if($control === "next"){
+        $_SESSION["count"]++;
+    } 
+    if ($control === "previous") {
+        $_SESSION["count"]--;
+    }
+}
+
+$week_num = (int) $calendar->week_num(getdate()) + $_SESSION["count"];
+$weeks = $calendar->make_weeks($get_weeks, $week_num);
+
+?>
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -17,60 +39,23 @@ $weeks = 1;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="style.css">
-    <title>Calendrier</title>
+    <title>Document</title>
 </head>
 <body>
+    <form action="" method="POST">
 
-    <div class="calendar">
-        <?php foreach($year as $key) : ?>
-            <?php $date = getdate($key)?>
+        <div class="calendar">
+            <?php foreach($weeks as $key => $value) : ?>
+                <p><?= $value[$week_num]["weekday"] ?>, 
+                   <?= $value[$week_num]["mday"] ?>, 
+                   <?= $value[$week_num]["month"] ?>, 
+                   <?= $value[$week_num]["year"] ?>
+            </p>
+            <?php endforeach ?>
+        </div>
 
-            <?php if ($count % 7 === 0) :?>
-            <div class="week <?= $weeks++ ?>">
-            <?php endif ?>
-
-                <div id="<?= $date["weekday"] ?>">
-                    <p><?= $date["weekday"] ?>, <?= $date["yday"] ?>, <?= $date["month"] ?></p>
-                </div>
-                <?php $count++ ?>
-
-            <?php if ($count % 7 === 0) :?>
-            </div>
-            <?php endif ?>
-
-        <?php endforeach ?>
-        <button class ="previous">-</button>
-        <button class="next">+</button>
-    </div>
-
-<script type="text/javascript">
-    let week_num = '<?= $calendar->week_num(getdate()) ?>';
-    let next = document.querySelector('.next');
-    let previous = document.querySelector('.previous');
-    console.log(next);
-    let weeks = document.querySelectorAll(".week");
-    next.addEventListener('click', function(){
-        week_num++;
-    })
-    previous.addEventListener('click', function(){
-        week_num--;
-    })
-    setInterval(function(){
-        for (let i = 0; i < weeks.length; i++) {
-            if(weeks[i].classList.contains(week_num.toString())){
-                weeks[i].classList.add('transition');
-            } else {
-                weeks[i].classList.remove('transition');
-            }
-        }
-    }, 500)
-</script>
+        <input name="control" type="submit" value="previous">
+        <input name="control" type="submit" value="next">
+    </form>
 </body>
 </html>
-
-
-
-
-
-

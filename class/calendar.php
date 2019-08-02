@@ -186,7 +186,7 @@ class Calendar {
     }
 
     private function get_next_year(){
-        return getdate(mktime(0, 0, 0, 1, 1, ($this->get_date_now()["year"] + 1)));
+        return getdate(mktime(0, 0, 0, 1, 1, ($this->get_date_now()["year"] + 30)));
     }
 
     private function decale_day(){
