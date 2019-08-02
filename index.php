@@ -58,13 +58,13 @@ $weeks = $calendar->make_weeks($get_weeks, $week_num);
 
                     <?php $limite = ($week_day) ? true : false; ?>
                         <?php if($limite) : ?>
-                            <p id="day" class="<?= $week_day ?>">  
+                            <div id="day" class="<?= $week_day ?>">  
                                 <?= $calendar->translate($calendar::DAY, $week_day) ?> 
                                 <?= $month_day ?> 
                                 <?= $calendar->translate($calendar::MONTH, $month) ?>                         
                                 <?php $week__N = (int) round($year_day / 7, 0, PHP_ROUND_HALF_DOWN);
                                 ?>
-                            </p>
+                            </div>
                         <?php endif ?>
                     <?php endforeach ?>
                     

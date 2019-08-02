@@ -6,7 +6,6 @@
     margin: auto;
 
     .calendar{
-        background-color: aqua;
         display: grid;
         grid-template-columns: repeat(7, 1fr);
         grid-template-rows: 1fr 7fr 1fr;

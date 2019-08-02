@@ -147,7 +147,7 @@ class Calendar {
         return $element;
     }
 
-
+//--------------------------------------------------------------------
 
     private function decale_day(){
         return $this->get_date_now()[0] - self::SECONDES_PERS_DAY;
