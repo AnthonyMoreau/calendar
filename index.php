@@ -9,8 +9,6 @@ session_start();
 $calendar = new Calendar(getdate());
 $year = $calendar->year();
 $get_weeks = $calendar->get_weeks($year);
-;
-
 
 $_SESSION["count"];
 
@@ -46,10 +44,11 @@ $weeks = $calendar->make_weeks($get_weeks, $week_num);
 
         <div class="calendar">
             <?php foreach($weeks as $key => $value) : ?>
-                <p><?= $value[$week_num]["weekday"] ?>, 
-                   <?= $value[$week_num]["mday"] ?>, 
-                   <?= $value[$week_num]["month"] ?>, 
-                   <?= $value[$week_num]["year"] ?>
+            <p>     
+                <?= $calendar->translate($calendar::DAY, $value[$week_num]["weekday"]) ?>, 
+                <?= $value[$week_num]["mday"] ?>, 
+                <?= $calendar->translate($calendar::MONTH, $value[$week_num]["month"]) ?>, 
+                <?= $value[$week_num]["year"] ?>
             </p>
             <?php endforeach ?>
         </div>

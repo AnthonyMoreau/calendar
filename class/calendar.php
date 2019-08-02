@@ -35,8 +35,9 @@ class Calendar {
 
 
 
-    public function __construct($date__now){
+    public function __construct($date__now, $years = 30){
         $this->date__now = $date__now;
+        $this->years = $years;
     }
 
     public function get_date_now(){
@@ -186,7 +187,7 @@ class Calendar {
     }
 
     private function get_next_year(){
-        return getdate(mktime(0, 0, 0, 1, 1, ($this->get_date_now()["year"] + 30)));
+        return getdate(mktime(0, 0, 0, 1, 1, ($this->get_date_now()["year"] + $this->years)));
     }
 
     private function decale_day(){
