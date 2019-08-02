@@ -1,0 +1,58 @@
+.calendar-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+    margin: auto;
+
+    .calendar{
+        background-color: aqua;
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        grid-template-rows: 1fr 7fr 1fr;
+        grid-template-areas: 
+        " year year year year year year year "
+        " Monday  Tuesday Wednesday Thursday Friday Saturday Sunday "
+        " weeks weeks weeks weeks weeks weeks weeks "
+        " buttons buttons buttons buttons buttons buttons buttons ";
+    }
+    #day{
+        text-align: center;
+        width: 12.85vw;
+    }
+    .year{
+        grid-area: year;
+        text-align: center;
+        padding: 1em 0;
+    }
+    .Monday{
+        grid-area: Monday;
+    }
+    .Tuesday{
+        grid-area: Tuesday;
+    }
+    .Wednesday{
+        grid-area: Wednesday;
+    }
+    .Thursday{
+        grid-area: Thursday;
+    }
+    .Friday{
+        grid-area: Friday;
+    }
+    .Saturday{
+        grid-area: Saturday;
+    }
+    .Sunday{
+        grid-area: Sunday;
+    }
+    .weeks{
+        grid-area: weeks;
+        text-align: center;
+    }
+    .buttons{
+        grid-area: buttons;
+        text-align: center;
+        font-size: 1.2em;
+    }
+}

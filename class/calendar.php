@@ -34,7 +34,6 @@ class Calendar {
     private $week = [];
 
 
-
     public function __construct($date__now, $years = 30){
         $this->date__now = $date__now;
         $this->years = $years;
@@ -103,7 +102,6 @@ class Calendar {
                    }
                }
                
-
             } else {
                 $min = 0;
                 $max = 7;
@@ -139,22 +137,6 @@ class Calendar {
         return $x;
     }
 
-    public function remote_year(){
-
-        $decal__day = $this->decale_day();
-
-        while(true){
-
-            $date = getdate($decal__day);
-            $this->year__last__contruct []= $date[0];
-            $decal__day -= self::SECONDES_PERS_DAY;  
-            if($decal__day < $this->get_reset_year()[0] AND getdate($decal__day)["weekday"] === "Sunday"){
-                break;
-            }  
-        }
-        return $this->year__last__contruct;
-    }
-
     public function translate($tab, $element){
 
         foreach($tab as $key => $value){
@@ -163,6 +145,12 @@ class Calendar {
             }
         }
         return $element;
+    }
+
+
+
+    private function decale_day(){
+        return $this->get_date_now()[0] - self::SECONDES_PERS_DAY;
     }
 
     private function termine_year(){
@@ -190,7 +178,19 @@ class Calendar {
         return getdate(mktime(0, 0, 0, 1, 1, ($this->get_date_now()["year"] + $this->years)));
     }
 
-    private function decale_day(){
-        return $this->get_date_now()[0] - self::SECONDES_PERS_DAY;
+    private function remote_year(){
+
+        $decal__day = $this->decale_day();
+
+        while(true){
+
+            $date = getdate($decal__day);
+            $this->year__last__contruct []= $date[0];
+            $decal__day -= self::SECONDES_PERS_DAY;  
+            if($decal__day < $this->get_reset_year()[0] AND getdate($decal__day)["weekday"] === "Sunday"){
+                break;
+            }  
+        }
+        return $this->year__last__contruct;
     }
 }
