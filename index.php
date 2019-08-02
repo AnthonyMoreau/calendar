@@ -4,7 +4,6 @@ require "functions.php";
 
 session_start();
 
-
 //initialise l'année en cours.......
 $calendar = new Calendar(getdate());
 $year = $calendar->year();
@@ -25,12 +24,9 @@ if(!empty($_POST)){
         $_SESSION["count"]--;
     }
 }
-
 $week_num = (int) $calendar->week_num(getdate()) + $_SESSION["count"];
 $weeks = $calendar->make_weeks($get_weeks, $week_num);
-
 ?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -41,7 +37,6 @@ $weeks = $calendar->make_weeks($get_weeks, $week_num);
 </head>
 <body>
     <form action="" method="POST">
-
         <div class="calendar">
             <?php foreach($weeks as $key => $value) : ?>
             <p>     
@@ -52,7 +47,6 @@ $weeks = $calendar->make_weeks($get_weeks, $week_num);
             </p>
             <?php endforeach ?>
         </div>
-
         <input name="control" type="submit" value="previous">
         <input name="control" type="submit" value="next">
     </form>
