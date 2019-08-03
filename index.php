@@ -3,23 +3,26 @@ require "class/calendar.php";
 require "functions.php";
 
 $day_date = getdate();
-
 session_start();
 
 //initialise l'année en cours.......
-
-$calendar = new Calendar($day_date, 2);
+$calendar = new Calendar($day_date);
 $year = $calendar->year();
 $get_weeks = $calendar->get_weeks($year);
-$week__N = false;
 
 $_SESSION["count"];
+$focused_ = null;
+$week__N = false;
 
 if(empty($_POST)){
-    $_SESSION["count"] = 0;
-}
-if(!empty($_POST)){
+
+    $focused_ = $calendar->focused($get_weeks);
+    $_SESSION["count"] = $focused_;
+
+} else {
+    dd($_POST);
     $control = $_POST["control"];
+
     if($control === '→' ){
         $_SESSION["count"]++;
     } 
@@ -27,9 +30,11 @@ if(!empty($_POST)){
         $_SESSION["count"]--;
     }
 }
+
 $week_num = (int) $calendar->week_num($day_date) + $_SESSION["count"];
 $weeks = $calendar->make_weeks($get_weeks, $week_num);
 ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -46,30 +51,14 @@ $weeks = $calendar->make_weeks($get_weeks, $week_num);
             <div class="calendar-container">
                 <div class="calendar">
                     <?php foreach($weeks as $key => $value) : ?>
-                    <?php 
-                        $week_day = ($value[$week_num]["weekday"] ? $value[$week_num]["weekday"] : "Jour Non identifié");
-                        $month_day = ($value[$week_num]["mday"] ? $value[$week_num]["mday"] : 0);
-                        $month = ($value[$week_num]["month"] ? $value[$week_num]["month"] : "Mois Non identifié");
-                        $year = ($value[$week_num]["year"] ? $value[$week_num]["year"] : 0);
-                        $year_day = ($value[$week_num]["yday"] ? $value[$week_num]["yday"] : 0);
-                    ?>
 
-                    <?php $limite = ($week_day) ? true : false; ?>
-                        <?php if($limite) : ?>
-                            <div id="day" class="<?= $week_day ?>">  
-                                <?= $calendar->translate($calendar::DAY, $week_day) ?> 
-                                <?= $month_day ?> 
-                                <?= $calendar->translate($calendar::MONTH, $month) ?>                         
-                                <?php $week__N = (int) round($year_day / 7, 0, PHP_ROUND_HALF_DOWN);
-                                ?>
-                                <div id="sections" class="morning">
-                                    <textarea name="morning" id="morning" cols="10" rows="10"></textarea>
-                                </div>
-                                <div class="afternoon">
-                                    <textarea name="afternoon" id="afternoon" cols="10" rows="10"></textarea>
-                                </div>
-                            </div>
-                        <?php endif ?>
+                        <?php $focuse = $calendar->focuse(null, $value, $week_num) ?>
+                        <?= $calendar->calendar($value, $week_num, $focuse)  ?>
+
+                        <?php $year = ($value[$week_num]["year"] ? $value[$week_num]["year"] : false); ?>
+                        <?php $year_day = ($value[$week_num]["yday"] ? $value[$week_num]["yday"] : false); ?>
+                        <?php $week__N = (isset($year_day)) ? (int) round($year_day / 7, 0, PHP_ROUND_HALF_DOWN) : false; ?>
+
                     <?php endforeach ?>
                     <span class="year"><?php if($year) {echo $year;} ?></span>
                     <span class="weeks">Semaine  <?php if($week__N) {echo $week__N;} else { echo "Vous ne pouvez pas accéder à ce semaine" ;} ?></span>
@@ -78,6 +67,9 @@ $weeks = $calendar->make_weeks($get_weeks, $week_num);
                         <input name="control" type="submit" value="&rarr;">
                     </div>
                 </div>
+            </div>
+            <div class="day-choice">
+                <input type="date" name="day" id="day">
             </div>
             <div class="submit">
                 <input type="submit" value="Mettre à jour">
