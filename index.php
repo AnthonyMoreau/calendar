@@ -18,7 +18,6 @@ $_SESSION["count"];
 if(empty($_POST)){
     $_SESSION["count"] = 0;
 }
-
 if(!empty($_POST)){
     $control = $_POST["control"];
     if($control === '→' ){
@@ -30,7 +29,6 @@ if(!empty($_POST)){
 }
 $week_num = (int) $calendar->week_num($day_date) + $_SESSION["count"];
 $weeks = $calendar->make_weeks($get_weeks, $week_num);
-
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -64,10 +62,15 @@ $weeks = $calendar->make_weeks($get_weeks, $week_num);
                                 <?= $calendar->translate($calendar::MONTH, $month) ?>                         
                                 <?php $week__N = (int) round($year_day / 7, 0, PHP_ROUND_HALF_DOWN);
                                 ?>
+                                <div id="sections" class="morning">
+                                    <textarea name="morning" id="morning" cols="10" rows="10"></textarea>
+                                </div>
+                                <div class="afternoon">
+                                    <textarea name="afternoon" id="afternoon" cols="10" rows="10"></textarea>
+                                </div>
                             </div>
                         <?php endif ?>
                     <?php endforeach ?>
-                    
                     <span class="year"><?php if($year) {echo $year;} ?></span>
                     <span class="weeks">Semaine  <?php if($week__N) {echo $week__N;} else { echo "Vous ne pouvez pas accéder à ce semaine" ;} ?></span>
                     <div class="buttons">
@@ -75,6 +78,9 @@ $weeks = $calendar->make_weeks($get_weeks, $week_num);
                         <input name="control" type="submit" value="&rarr;">
                     </div>
                 </div>
+            </div>
+            <div class="submit">
+                <input type="submit" value="Mettre à jour">
             </div>
         </form>
     </div>
