@@ -27,13 +27,17 @@ class Calendar {
     ];
     const SECONDES_PERS_DAY = 86400;
     
-    private $remote = 2;
+    private $remote = 1;
     private $next = 2;
 
     private $year__last__contruct = [];
     private $year__next__contruct = [];
     private $day;
     private $week = [];
+
+
+
+
 
     public function __construct($date__now){
         $this->date__now = $date__now;
@@ -182,7 +186,6 @@ class Calendar {
             
             $x = explode("/", $date);
             if($x[0] === $value["mday"] AND $x[1] === $value["mon"] AND $sx[2] === $value["year"]){
-                dd($value["mday"]);
                 $focuse = true;
             }
         }
@@ -218,7 +221,13 @@ class Calendar {
     }
 
 
+
+
+
+
+
 //--------------------------------------------------------------------
+
     private function next(){
         return $this->next;
     }

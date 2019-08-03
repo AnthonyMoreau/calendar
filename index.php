@@ -20,7 +20,6 @@ if(empty($_POST)){
     $_SESSION["count"] = $focused_;
 
 } else {
-    dd($_POST);
     $control = $_POST["control"];
 
     if($control === '→' ){
@@ -51,7 +50,7 @@ $weeks = $calendar->make_weeks($get_weeks, $week_num);
             <div class="calendar-container">
                 <div class="calendar">
                     <?php foreach($weeks as $key => $value) : ?>
-
+                        
                         <?php $focuse = $calendar->focuse(null, $value, $week_num) ?>
                         <?= $calendar->calendar($value, $week_num, $focuse)  ?>
 
@@ -67,9 +66,6 @@ $weeks = $calendar->make_weeks($get_weeks, $week_num);
                         <input name="control" type="submit" value="&rarr;">
                     </div>
                 </div>
-            </div>
-            <div class="day-choice">
-                <input type="date" name="day" id="day">
             </div>
             <div class="submit">
                 <input type="submit" value="Mettre à jour">
