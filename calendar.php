@@ -66,7 +66,7 @@ class calendar {
 
     public function focuse($day){
         if(empty($_POST["date"])){
-            if($day["yday"] === getdate()["yday"]){
+            if($day["yday"] === getdate()["yday"] AND $day["year"] === getdate()["year"]){
                 return "autofocus='focused'";
             }
         } else {
@@ -82,10 +82,7 @@ class calendar {
 
     private function get_day($date){
         $a = explode("/", $date);
-
-        $b = getdate(mktime(0, 0, 0, (int) $a[1], (int) $a[0], (int) $a[2]));
-
-        return $b;
+        return getdate(mktime(0, 0, 0, (int) $a[1], (int) $a[0], (int) $a[2]));
     }
 
     private function make__week(){
