@@ -66,8 +66,8 @@ $week = $date->calendar($_SESSION["count"]);
                     <?php $week__N = $date->week_num($value["yday"]);?>
                     <?php endforeach ?>
                 <?php else : ?>
-                    <div id="day" class="<?= $week["weekday"] ?> day">
-
+                    <div class="day">
+                        <div class="day-container">
                             <?= $date->translate($date::DAY, $week["weekday"]) ?>
                             <?= $week["mday"] ?>
                             <?= $date->translate($date::MONTH, $week["month"]) ?>
@@ -79,6 +79,7 @@ $week = $date->calendar($_SESSION["count"]);
                                 <textarea name="afternoon" id="afternoon" cols="10" rows="10" <?php if(getdate()["hours"] >= 12) {echo $date->focuse($value);} ?>></textarea>
                             </div>
                         </div>
+                    </div>
                     <?php $year = $week["year"];?>
                     <?php $week__N = $date->week_num($week["yday"]);?>
                 <?php endif ?>

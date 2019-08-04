@@ -21,7 +21,14 @@
         z-index: 0;
     }
     .day{
-        margin: auto !important;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        width: 100vw;
+        z-index: 0;
+        .day-container{
+            width: 33%;
+        }
     }
     .year{
         grid-area: year;
