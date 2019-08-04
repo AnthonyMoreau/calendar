@@ -1,41 +1,38 @@
 <?php 
-require "class/calendar.php";
+require "pdo/pdo.php";
+require "calendar.php";
 require "functions.php";
-
-$day_date = getdate();
 session_start();
-
-//initialise l'année en cours.......
-$calendar = new Calendar($day_date);
-$year = $calendar->year();
-$get_weeks = $calendar->get_weeks($year);
-
+$day_date = getdate();
 $_SESSION["count"];
-$focused_ = null;
-$week__N = false;
 
 if(empty($_POST)){
+    
+    $_SESSION["count"] = 0;
 
-    $focused_ = $calendar->focused($get_weeks);
-    $_SESSION["count"] = $focused_;
+}else {
+    
+    if(empty($_POST["date"])){
 
-} else {
-    $control = $_POST["control"];
-
-    if($control === '→' ){
-        $_SESSION["count"]++;
-    } 
-    if ($control === '←') {
-        $_SESSION["count"]--;
+        $control = $_POST["control"];
+    
+        if($control === '→' ){
+            $_SESSION["count"]++;
+            
+        } 
+        if ($control === '←') {
+            $_SESSION["count"]--;
+        }
     }
 }
 
-$week_num = (int) $calendar->week_num($day_date) + $_SESSION["count"];
-$weeks = $calendar->make_weeks($get_weeks, $week_num);
+$date = new Calendar($day_date);
+$week = $date->calendar($_SESSION["count"]);
 ?>
 
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -44,33 +41,62 @@ $weeks = $calendar->make_weeks($get_weeks, $week_num);
     <link rel="stylesheet" href="style.css">
     <title>Document</title>
 </head>
+
 <body>
     <div class="site-content">
         <form action="" method="POST">
             <div class="calendar-container">
                 <div class="calendar">
-                    <?php foreach($weeks as $key => $value) : ?>
-                        
-                        <?php $focuse = $calendar->focuse(null, $value, $week_num) ?>
-                        <?= $calendar->calendar($value, $week_num, $focuse)  ?>
+                <?php if(empty($_POST["date"])) : ?>
+                    <?php foreach($week as $key => $value) : ?>
+                        <div id="day" class="<?= $value["weekday"] ?>">
 
-                        <?php $year = ($value[$week_num]["year"] ? $value[$week_num]["year"] : false); ?>
-                        <?php $year_day = ($value[$week_num]["yday"] ? $value[$week_num]["yday"] : false); ?>
-                        <?php $week__N = (isset($year_day)) ? (int) round($year_day / 7, 0, PHP_ROUND_HALF_DOWN) : false; ?>
+                            <?= $date->translate($date::DAY, $value["weekday"]) ?>
+                            <?= $value["mday"] ?>
+                            <?= $date->translate($date::MONTH, $value["month"]) ?>
 
+                            <div id="sections" class="morning">
+                                <textarea name="morning" id="morning" cols="10" rows="10" <?php if(getdate()["hours"] < 12) {echo $date->focuse($value);} ?>></textarea>
+                            </div>
+                            <div id="sections" class="afternoon">
+                                <textarea name="afternoon" id="afternoon" cols="10" rows="10" <?php if(getdate()["hours"] >= 12) {echo $date->focuse($value);} ?>></textarea>
+                            </div>
+                        </div>
+                    <?php $year = $value["year"];?>
+                    <?php $week__N = $date->week_num($value["yday"]);?>
                     <?php endforeach ?>
+                <?php else : ?>
+                    <div id="day" class="<?= $week["weekday"] ?> day">
+
+                            <?= $date->translate($date::DAY, $week["weekday"]) ?>
+                            <?= $week["mday"] ?>
+                            <?= $date->translate($date::MONTH, $week["month"]) ?>
+
+                            <div id="sections" class="morning">
+                                <textarea name="morning" id="morning" cols="10" rows="10" <?php if(getdate()["hours"] < 12) {echo $date->focuse($value);} ?>></textarea>
+                            </div>
+                            <div id="sections" class="afternoon">
+                                <textarea name="afternoon" id="afternoon" cols="10" rows="10" <?php if(getdate()["hours"] >= 12) {echo $date->focuse($value);} ?>></textarea>
+                            </div>
+                        </div>
+                    <?php $year = $week["year"];?>
+                    <?php $week__N = $date->week_num($week["yday"]);?>
+                <?php endif ?>
                     <span class="year"><?php if($year) {echo $year;} ?></span>
-                    <span class="weeks">Semaine  <?php if($week__N) {echo $week__N;} else { echo "Vous ne pouvez pas accéder à ce semaine" ;} ?></span>
+                    <span class="weeks">Semaine  <?php if($week__N) {echo $week__N;} else { echo "Vous ne pouvez pas accéder à cette semaine" ;} ?></span>
                     <div class="buttons">
+                        <input type="datetime" name="date" id="date">
                         <input name="control" type="submit" value="&larr;">
                         <input name="control" type="submit" value="&rarr;">
                     </div>
                 </div>
             </div>
             <div class="submit">
+                <input type="submit" value="Chercher un jour">
                 <input type="submit" value="Mettre à jour">
             </div>
         </form>
     </div>
 </body>
+
 </html>
