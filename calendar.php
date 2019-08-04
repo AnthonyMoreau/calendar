@@ -82,6 +82,7 @@ class calendar {
 
     private function get_day($date){
         $a = explode("/", $date);
+        
         return getdate(mktime(0, 0, 0, (int) $a[1], (int) $a[0], (int) $a[2]));
     }
 

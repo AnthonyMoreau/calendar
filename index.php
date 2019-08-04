@@ -52,13 +52,14 @@ $week = $date->calendar($_SESSION["count"]);
                                 <?= $date->translate($date::DAY, $value["weekday"]) ?>
                                 <?= $value["mday"] ?>
                                 <?= $date->translate($date::MONTH, $value["month"]) ?>
-
-                                <div id="sections" class="morning">
-                                    <textarea name="morning_<?= $value["yday"] ?>" id="morning" cols="10" rows="10" <?php if(getdate()["hours"] < 12) {echo $date->focuse($value);} ?>></textarea>
-                                </div>
-                                <div id="sections" class="afternoon">
-                                    <textarea name="afternoon_<?= $value["yday"] ?>" id="afternoon" cols="10" rows="10" <?php if(getdate()["hours"] >= 12) {echo $date->focuse($value);} ?>></textarea>
-                                </div>
+                                <?php if($value["weekday"] !== "Sunday") : ?>
+                                    <div id="sections" class="morning">
+                                        <textarea name="morning_<?= $value["yday"] ?>" id="morning" cols="10" rows="10" <?php if(getdate()["hours"] < 12) {echo $date->focuse($value);} ?>></textarea>
+                                    </div>
+                                    <div id="sections" class="afternoon">
+                                        <textarea name="afternoon_<?= $value["yday"] ?>" id="afternoon" cols="10" rows="10" <?php if(getdate()["hours"] >= 12) {echo $date->focuse($value);} ?>></textarea>
+                                    </div>
+                                <?php endif ?>
                                     <input type="hidden" name="year" value="<?= $value["year"] ?>">
                             </div>
                         <?php $year = $value["year"];?>
