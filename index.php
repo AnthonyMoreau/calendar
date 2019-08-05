@@ -1,10 +1,11 @@
 <?php 
-require "pdo/pdo.php";
+// require "pdo/pdo.php";
 require "calendar.php";
 require "functions.php";
 
 session_start();
 $day_date = getdate();
+
 $_SESSION["count"];
 
 if(empty($_POST)){
@@ -27,8 +28,9 @@ if(empty($_POST)){
     }
 }
 
-$date = new Calendar($day_date);
+$date = new agenda($day_date);
 $week = $date->calendar($_SESSION["count"]);
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -44,10 +46,13 @@ $week = $date->calendar($_SESSION["count"]);
         <div class="site-content">
             <form action="" method="POST">
                 <div class="calendar-container">
-                    <div class="calendar">
+                    <div class="calendar is-animate">
+
                     <?php if(empty($_POST["date"])) : ?>
+
                         <?php foreach($week as $key => $value) : ?>
-                            <div id="day" class="<?= $value["weekday"] ?>">
+                            
+                        <div id="day" class="<?= $value["weekday"] ?>">
 
                                 <?= $date->translate($date::DAY, $value["weekday"]) ?>
                                 <?= $value["mday"] ?>
@@ -93,11 +98,16 @@ $week = $date->calendar($_SESSION["count"]);
                         </div>
                     </div>
                 </div>
+
+
                 <div class="submit">
                     <input type="submit" value="Chercher un jour">
                     <input type="submit" value="Mettre à jour">
                 </div>
             </form>
         </div>
+
+
+        <script src="js/animation.js"></script>
     </body>
 </html>

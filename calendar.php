@@ -1,7 +1,7 @@
 <?php 
 
 
-class calendar {
+class agenda {
 
     const DAY = [
         "Monday" => "Lundi",
@@ -57,7 +57,9 @@ class calendar {
     public function translate($tab, $element){
 
         foreach($tab as $key => $value){
+
             if($element === $key){
+                
                 $element = $value;
             }
         }
@@ -65,6 +67,7 @@ class calendar {
     }
 
     public function focuse($day){
+
         if(empty($_POST["date"])){
             if($day["yday"] === getdate()["yday"] AND $day["year"] === getdate()["year"]){
                 return "autofocus='focused'";
@@ -116,7 +119,7 @@ class calendar {
     }
 
     private function timestamp(){
-        return $this->date__now[0];
+        return $this->get_date_now()[0];
     }
 
     private function remote_monday(){
