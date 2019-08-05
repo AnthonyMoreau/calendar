@@ -1,11 +1,13 @@
 <?php 
-// require "pdo/pdo.php";
 require "calendar.php";
 require "functions.php";
+require "DB_connection/db_name.php";
 
 session_start();
-$day_date = getdate();
 
+$pdo =  new my_dabatase();
+
+$day_date = getdate();
 $_SESSION["count"];
 
 if(empty($_POST)){
@@ -13,23 +15,30 @@ if(empty($_POST)){
     $_SESSION["count"] = 0;
 
 }else {
-
+    
     if(empty($_POST["date"])){
 
-        $control = $_POST["control"];
-    
-        if($control === '→' ){
-            $_SESSION["count"]++;
-            
-        } 
-        if ($control === '←') {
-            $_SESSION["count"]--;
+        $pdo->insert_day_description($_POST);
+
+        if(!empty($_POST["control"])){
+
+            $control = $_POST["control"];
+        
+            if($control === '→' ){
+                $_SESSION["count"]++;
+                
+            } 
+            if ($control === '←') {
+                $_SESSION["count"]--;
+            }
         }
     }
 }
 
-$date = new agenda($day_date);
+$date = new Calendar($day_date);
 $week = $date->calendar($_SESSION["count"]);
+
+
 
 ?>
 <!DOCTYPE html>
@@ -46,13 +55,10 @@ $week = $date->calendar($_SESSION["count"]);
         <div class="site-content">
             <form action="" method="POST">
                 <div class="calendar-container">
-                    <div class="calendar is-animate">
-
+                    <div class="calendar">
                     <?php if(empty($_POST["date"])) : ?>
-
                         <?php foreach($week as $key => $value) : ?>
-                            
-                        <div id="day" class="<?= $value["weekday"] ?>">
+                            <div id="day" class="<?= $value["weekday"] ?>">
 
                                 <?= $date->translate($date::DAY, $value["weekday"]) ?>
                                 <?= $value["mday"] ?>
@@ -65,7 +71,7 @@ $week = $date->calendar($_SESSION["count"]);
                                         <textarea name="afternoon_<?= $value["yday"] ?>" id="afternoon" cols="10" rows="10" <?php if(getdate()["hours"] >= 12) {echo $date->focuse($value);} ?>></textarea>
                                     </div>
                                 <?php endif ?>
-                                    <input type="hidden" name="year" value="<?= $value["year"] ?>">
+                                    
                             </div>
                         <?php $year = $value["year"];?>
                         <?php $week__N = $date->week_num($value["yday"]);?>
@@ -83,7 +89,6 @@ $week = $date->calendar($_SESSION["count"]);
                                 <div id="sections" class="afternoon">
                                     <textarea name="afternoon_<?= $week["yday"] ?>" id="afternoon" cols="10" rows="10" <?php if(getdate()["hours"] >= 12) {echo $date->focuse($value);} ?>></textarea>
                                 </div>
-                                <input type="hidden" name="year" value="<?= $week["year"] ?>">
                             </div>
                         </div>
                         <?php $year = $week["year"];?>
@@ -92,22 +97,18 @@ $week = $date->calendar($_SESSION["count"]);
                         <span class="year"><?php if($year) {echo $year;} ?></span>
                         <span class="weeks">Semaine  <?= $week__N ?></span>
                         <div class="buttons">
-                            <input type="datetime" name="date" id="date" value="<?php if($_POST["date"]){echo $_POST["date"];} ?>">
+                            <input type="datetime" name="date" id="date" value="<?php if(isset($_POST["date"])){echo $_POST["date"];} ?>">
+                            <input type="hidden" name="year" value="<?= $year ?>">
                             <input name="control" type="submit" value="&larr;">
                             <input name="control" type="submit" value="&rarr;">
                         </div>
                     </div>
                 </div>
-
-
                 <div class="submit">
                     <input type="submit" value="Chercher un jour">
                     <input type="submit" value="Mettre à jour">
                 </div>
             </form>
         </div>
-
-
-        <script src="js/animation.js"></script>
     </body>
 </html>
